@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from models import Base
+from models import Base, Specialty, 
 
 DATABASE_URL = "sqlite:///db/clinic.db"
 
@@ -13,4 +13,4 @@ if __name__ == '__main__':
     SessionLocal = sessionmaker(bind=engine)
     session = SessionLocal()
 
-    print("Database initialized.")
+   dentist = Specialty()

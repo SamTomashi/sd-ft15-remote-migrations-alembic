@@ -1,49 +1,49 @@
-from sqlalchemy import Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Column, String, ForeignKey, Integer, DateTime
 from sqlalchemy.orm import relationship, declarative_base
 from datetime import datetime
 
 Base = declarative_base()
 
-
 class Specialty(Base):
-    __tablename__ = 'specialties'
 
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False, unique=True)
+    __tablename__= 'specialties'
 
-    # Relationships
-    doctors = relationship("Doctor", back_populates="specialty")
-
+    id=  Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    #relationship
+    doctors = relationship('Doctor', back_populates='specialty')
 
 class Doctor(Base):
-    __tablename__ = 'doctors'
-
-    id = Column(Integer, primary_key=True, index=True)
+    __tablename__= 'doctors'
+    id= Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
     specialty_id = Column(Integer, ForeignKey('specialties.id'))
+    gender=Column(String, nullable=False)
 
-    specialty = relationship("Specialty", back_populates="doctors")
-    appointments = relationship("Appointment", back_populates="doctor")
+    #relaionship
+    specialty = relationship('Specialty', back_populates='doctors')
+
+    #Remember to add the doctor's appointment relationship
+    appointments = relationship('Appointment',back_populates='doctor')
 
 
 class Patient(Base):
-    __tablename__ = 'patients'
-
-    id = Column(Integer, primary_key=True, index=True)
+    __tablename__='patients'
+    id=Column(Integer, primary_key=True)
     name = Column(String, nullable=False)
-    age = Column(Integer)
 
-    appointments = relationship("Appointment", back_populates="patient")
-
+    #Remember to add the appointne relationship
+    appointments = relationship('Appointment', back_populates='patient')
 
 class Appointment(Base):
-    __tablename__ = 'appointments'
+    __tablename__='appointments'
+    id=Column(Integer, primary_key=True)
+    doctor_id=Column(Integer, ForeignKey('doctors.id'))
+    patient_id=Column(Integer, ForeignKey('patients.id'))
+    treatment=Column(String, nullable=False)
+    appointment_datetime=Column(DateTime, default=datetime.utcnow)
 
-    id = Column(Integer, primary_key=True, index=True)
-    doctor_id = Column(Integer, ForeignKey('doctors.id'))
-    patient_id = Column(Integer, ForeignKey('patients.id'))
-    appointment_date = Column(DateTime, default=datetime.utcnow)
-    notes = Column(String)
-
-    doctor = relationship("Doctor", back_populates="appointments")
-    patient = relationship("Patient", back_populates="appointments")
+    #Relationships
+    doctor= relationship('Doctor', back_populates='appointments')
+    patient = relationship('Patient', back_populates='appointments')
+    
